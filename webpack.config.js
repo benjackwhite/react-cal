@@ -11,6 +11,7 @@ const WEBPACK_HOST = "localhost";
 const WEBPACK_PORT = process.env.PORT || 9001;
 const ENV_DEVELOPMENT = process.env.NODE_ENV === "development";
 const ENV_BUILD = process.env.NODE_ENV.indexOf("build") === 0;
+const ENV_DEMO = process.env.NODE_ENV === "demo";
 const MINIFY = process.env.NODE_ENV === "build-min";
 
 // =========================================================
@@ -27,7 +28,7 @@ config.resolve = {
 // =====================================
 //  DEVELOPMENT
 // -------------------------------------
-if (ENV_DEVELOPMENT) {
+if (ENV_DEVELOPMENT || ENV_DEMO) {
   config.devtool = "inline-source-map";
   config.entry = [
     `webpack-dev-server/client?http://${WEBPACK_HOST}:${WEBPACK_PORT}`,
@@ -70,13 +71,10 @@ if (ENV_DEVELOPMENT) {
       filename: "index.html",
       hash: false,
       inject: "body"
-    })
-  ];
-
-  config.plugins.push(
+    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin()
-  );
+  ];
 
   config.devServer = {
     historyApiFallback: {
@@ -98,6 +96,49 @@ if (ENV_DEVELOPMENT) {
       version: false
     }
   };
+}
+
+if (ENV_DEMO) {
+  config.entry = ["./src/demo/index.jsx"];
+
+  const extractSASSToCSS = new ExtractTextPlugin({
+    filename: "index.css"
+  });
+
+  config.module = {
+    rules: [
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loader: "babel-loader"
+      },
+      {
+        test: /\.scss$/,
+        use: extractSASSToCSS.extract([
+          "css-loader?importLoaders=1",
+          "sass-loader"
+        ])
+      }
+    ]
+  };
+
+  config.output = {
+    filename: "index.js",
+    path: path.resolve("./build"),
+    publicPath: "/"
+  };
+
+  config.plugins = [
+    new HtmlWebpackPlugin({
+      filename: "index.html",
+      hash: false,
+      inject: "body"
+    }),
+    new UglifyJSPlugin({
+      minimize: true
+    }),
+    extractSASSToCSS
+  ].filter(Boolean);
 }
 
 if (ENV_BUILD) {
@@ -163,7 +204,11 @@ if (ENV_BUILD) {
   };
 
   config.plugins = [
-    MINIFY ? new UglifyJSPlugin({ minimize: true }) : false,
+    MINIFY
+      ? new UglifyJSPlugin({
+          minimize: true
+        })
+      : false,
     extractSASSToSASS,
     extractSASSToCSS
   ].filter(Boolean);
