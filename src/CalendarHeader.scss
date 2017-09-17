@@ -1,0 +1,66 @@
+$btn-color: #444;
+
+@mixin base-button() {
+  outline: none;
+  border: none;
+  border-radius: 0.5em;
+  background: fade-out($btn-color, 0.9);
+  padding: 0.5em 1em;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1;
+    background: fade-out($btn-color, 0.8);
+  }
+
+  &:active {
+    background: fade-out($btn-color, 0.7);
+  }
+}
+
+.ReactCalendarHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  &__monthpicker,
+  &__clear button {
+    @include base-button();
+  }
+
+  &__directionbtn {
+    $radius: 5em;
+    $size: 2em;
+    @include base-button();
+    padding: $size * 0.4 $size * 0.5;
+    opacity: 0.5;
+    background: none;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &:after {
+      content: " ";
+      display: block;
+      width: $size * 0.3;
+      height: $size * 0.3;
+      border-left: 2px solid $btn-color;
+      border-top: 2px solid $btn-color;
+    }
+    &:first-child {
+      border-radius: $radius 0 0 $radius;
+      &:after {
+        margin-left: $size * 0.15;
+        margin-right: - $size * 0.15;
+        transform: rotate(-45deg);
+      }
+    }
+    &:last-child {
+      border-radius: 0 $radius $radius 0;
+      &:after {
+        margin-left: - $size * 0.15;
+        transform: rotate(135deg);
+      }
+    }
+  }
+}
