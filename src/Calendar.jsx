@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import moment from "moment";
+import { startOfMonth } from "date-fns";
 import CalendarHeader from "./CalendarHeader";
 import CalendarTiles from "./CalendarTiles";
 import { datesForMonth } from "./utils";
@@ -9,7 +9,7 @@ import "./Calendar.scss";
 
 class Calendar extends Component {
   static propTypes = {
-    startMonth: PropTypes.instanceOf(moment),
+    startMonth: PropTypes.instanceOf(Date),
     onDateRangeChange: PropTypes.func,
     renderDate: PropTypes.func,
     onSelection: PropTypes.func,
@@ -19,7 +19,7 @@ class Calendar extends Component {
   };
 
   static defaultProps = {
-    startMonth: moment(),
+    startMonth: startOfMonth(Date.now()),
     onDateRangeChange: null,
     renderDate: () => null,
     onSelection: () => null,
@@ -61,7 +61,7 @@ class Calendar extends Component {
 
   setMonth = month => {
     this.setState({
-      month: month
+      month
     });
 
     if (this.props.onDateRangeChange) {

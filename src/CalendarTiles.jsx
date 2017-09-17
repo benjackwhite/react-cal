@@ -1,17 +1,26 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import moment from "moment";
+import {
+  getMonth,
+  getDate,
+  format,
+  isEqual,
+  isBefore,
+  isAfter,
+  isWithinRange
+} from "date-fns";
+
 import { bem, datesForMonth } from "./utils";
 
 import "./CalendarTiles.scss";
 
 export default class CalendarTiles extends Component {
   static propTypes = {
-    month: PropTypes.instanceOf(moment).isRequired,
+    month: PropTypes.instanceOf(Date).isRequired,
     startOfWeek: PropTypes.string,
     renderDate: PropTypes.func.isRequired,
     onSelection: PropTypes.func.isRequired,
-    selectionRange: PropTypes.array,
+    selectionRange: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
     unselectSafeElement: PropTypes.element,
     clearSelectionOnExternalClick: PropTypes.bool
   };
@@ -30,9 +39,6 @@ export default class CalendarTiles extends Component {
   componentDidMount() {
     window.addEventListener("click", this.onWindowClick);
   }
-  componentWillUnmount() {
-    window.removeEventListener("click", this.onWindowClick);
-  }
 
   componentWillReceiveProps(nextProps) {
     if (!nextProps.selectionRange) {
@@ -49,32 +55,38 @@ export default class CalendarTiles extends Component {
     }
   }
 
-  onSelectStart = (date, e) => {
+  componentWillUnmount() {
+    window.removeEventListener("click", this.onWindowClick);
+  }
+
+  onSelectStart = date => {
     this.setState({
       selectionStart: date
     });
     this.props.onSelection([date, date]);
   };
 
-  onSelectMove = (date, e) => {
+  onSelectMove = date => {
     const { selectionStart } = this.state;
-    const { selectionRange } = this.props;
+    const { selectionRange, onSelection } = this.props;
 
     if (!selectionStart) {
       return;
     }
 
-    if (date.isSame(selectionStart)) {
-      return this.props.onSelection([date, date]);
+    if (isEqual(date, selectionStart)) {
+      onSelection([date, date]);
+      return;
     }
 
     // Selecting backwards
-    if (date.isBefore(selectionStart) && selectionRange[0] !== date) {
-      return this.props.onSelection([date, selectionStart]);
+    if (isBefore(date, selectionStart) && selectionRange[0] !== date) {
+      onSelection([date, selectionStart]);
+      return;
     }
 
-    if (date.isAfter(selectionStart) && selectionRange[1] !== date) {
-      return this.props.onSelection([selectionStart, date]);
+    if (isAfter(date, selectionStart) && selectionRange[1] !== date) {
+      onSelection([selectionStart, date]);
     }
   };
 
@@ -96,7 +108,7 @@ export default class CalendarTiles extends Component {
     e.preventDefault();
   };
 
-  onWindowClick = e => {
+  onWindowClick = () => {
     if (!this.props.clearSelectionOnExternalClick) {
       return;
     }
@@ -107,23 +119,23 @@ export default class CalendarTiles extends Component {
     const { month, selectionRange } = this.props;
 
     const selected = selectionRange
-      ? date.isBetween(selectionRange[0], selectionRange[1], null, "[]")
+      ? isWithinRange(date, selectionRange[0], selectionRange[1])
       : false;
 
     return (
       <li
-        key={date.format("YYYY-MM-DD")}
+        key={format(date, "YYYY-MM-DD")}
         onMouseDown={e => this.onSelectStart(date, e)}
         onMouseOver={e => this.onSelectMove(date, e)}
         onMouseUp={e => this.onSelectEnd(date, e)}
         className={bem("ReactCalendarTiles__tile", {
-          offmonth: date.month() !== month.month(),
+          offmonth: getMonth(date) !== getMonth(month),
           selected,
           faded: !!selectionRange && !selected
         })}
       >
         <span className="ReactCalendarTiles__tile__number">
-          {date.date() === 1 ? date.format("MMM D") : date.format("D")}
+          {getDate(date) === 1 ? format(date, "MMM D") : format(date, "D")}
         </span>
 
         {this.props.renderDate(date)}
@@ -137,7 +149,7 @@ export default class CalendarTiles extends Component {
     return (
       <div className="ReactCalendarTiles" onClick={this.onSafeAreaClick}>
         <ul className="ReactCalendarTiles__days">
-          {dates.slice(0, 7).map(d => <li>{d.format("ddd")}</li>)}
+          {dates.slice(0, 7).map(d => <li key={d}>{format(d, "ddd")}</li>)}
         </ul>
         <ul className="ReactCalendarTiles__tiles">
           <div className="ReactCalendarTiles__tiles__row">

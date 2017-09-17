@@ -1,3 +1,5 @@
+import { startOfMonth, subDays, addDays, getDay, getDate } from "date-fns";
+
 const daysOfWeek = [
   "sunday",
   "monday",
@@ -10,25 +12,16 @@ const daysOfWeek = [
 
 export const datesForMonth = (month, startDay = "sunday") => {
   const dayOffset = daysOfWeek.indexOf(startDay) || 0;
-  const startOfMonth = month.clone().startOf("month");
-  const startOfCalendar = startOfMonth.subtract(
-    startOfMonth.day() + 7 - dayOffset,
-    "days"
-  );
+  const monthStart = startOfMonth(month);
+  let startOfCalendar = subDays(monthStart, getDay(monthStart) + 7 - dayOffset);
 
-  const startCheck = startOfCalendar
-    .clone()
-    .add(7, "days")
-    .date();
+  const startCheck = getDate(addDays(startOfCalendar, 7));
 
   if (startCheck === 1 || startCheck > 7) {
-    startOfCalendar.add(7, "days");
+    startOfCalendar = addDays(startOfCalendar, 7);
   }
 
-  const dates = Array(...Array(35)).map(i =>
-    startOfCalendar.clone().add("days", i)
-  );
-
+  const dates = Array(...Array(35)).map((v, i) => addDays(startOfCalendar, i));
   return dates;
 };
 

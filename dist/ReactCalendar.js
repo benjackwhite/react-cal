@@ -1,12 +1,12 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("prop-types"), require("moment"), require("react"));
+		module.exports = factory(require("react"), require("prop-types"), require("date-fns"));
 	else if(typeof define === 'function' && define.amd)
-		define(["prop-types", "moment", "react"], factory);
+		define(["react", "prop-types", "date-fns"], factory);
 	else if(typeof exports === 'object')
-		exports["reactCal"] = factory(require("prop-types"), require("moment"), require("react"));
+		exports["reactCal"] = factory(require("react"), require("prop-types"), require("date-fns"));
 	else
-		root["reactCal"] = factory(root["prop-types"], root["moment"], root["react"]);
+		root["reactCal"] = factory(root["react"], root["prop-types"], root["date-fns"]);
 })(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_0__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -101,7 +101,10 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.datesForMonth = undefined;
 exports.bem = bem;
+
+var _dateFns = __webpack_require__(0);
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -111,21 +114,18 @@ var datesForMonth = exports.datesForMonth = function datesForMonth(month) {
   var startDay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "sunday";
 
   var dayOffset = daysOfWeek.indexOf(startDay) || 0;
-  var startOfMonth = month.clone().startOf("month");
-  var startOfCalendar = startOfMonth.subtract(startOfMonth.day() + 7 - dayOffset, "days");
+  var monthStart = (0, _dateFns.startOfMonth)(month);
+  var startOfCalendar = (0, _dateFns.subDays)(monthStart, (0, _dateFns.getDay)(monthStart) + 7 - dayOffset);
 
-  var startCheck = startOfCalendar.clone().add(7, "days").date();
+  var startCheck = (0, _dateFns.getDate)((0, _dateFns.addDays)(startOfCalendar, 7));
 
   if (startCheck === 1 || startCheck > 7) {
-    startOfCalendar.add(7, "days");
+    startOfCalendar = (0, _dateFns.addDays)(startOfCalendar, 7);
   }
 
-  var dates = [];
-
-  for (var i = 0; i < 7 * 5; i++) {
-    dates.push(startOfCalendar.clone().add("days", i));
-  }
-
+  var dates = Array.apply(undefined, _toConsumableArray(Array(35))).map(function (v, i) {
+    return (0, _dateFns.addDays)(startOfCalendar, i);
+  });
   return dates;
 };
 
@@ -154,10 +154,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
 var _Calendar = __webpack_require__(5);
 
 var _Calendar2 = _interopRequireDefault(_Calendar);
@@ -179,17 +175,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(0);
+var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(1);
+var _propTypes = __webpack_require__(2);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _moment = __webpack_require__(2);
-
-var _moment2 = _interopRequireDefault(_moment);
+var _dateFns = __webpack_require__(0);
 
 var _CalendarHeader = __webpack_require__(6);
 
@@ -303,7 +297,7 @@ var Calendar = function (_Component) {
 }(_react.Component);
 
 Calendar.propTypes = {
-  startMonth: _propTypes2.default.instanceOf(_moment2.default),
+  startMonth: _propTypes2.default.instanceOf(Date),
   onDateRangeChange: _propTypes2.default.func,
   renderDate: _propTypes2.default.func,
   onSelection: _propTypes2.default.func,
@@ -312,7 +306,7 @@ Calendar.propTypes = {
   clearSelectionOnExternalClick: _propTypes2.default.bool
 };
 Calendar.defaultProps = {
-  startMonth: (0, _moment2.default)(),
+  startMonth: (0, _dateFns.startOfMonth)(Date.now()),
   onDateRangeChange: null,
   renderDate: function renderDate() {
     return null;
@@ -339,21 +333,21 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(0);
+var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(1);
+var _propTypes = __webpack_require__(2);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _moment = __webpack_require__(2);
-
-var _moment2 = _interopRequireDefault(_moment);
+var _dateFns = __webpack_require__(0);
 
 __webpack_require__(7);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -375,12 +369,12 @@ var CalendarHeader = function (_Component) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = CalendarHeader.__proto__ || Object.getPrototypeOf(CalendarHeader)).call.apply(_ref, [this].concat(args))), _this), _this.nextMonth = function () {
-      _this.props.setMonth(_this.props.month.clone().add(1, "months"));
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = CalendarHeader.__proto__ || Object.getPrototypeOf(CalendarHeader)).call.apply(_ref, [this].concat(args))), _this), _this.onMonthChange = function (e) {
+      _this.props.setMonth((0, _dateFns.parse)(e.target.value, "YYYY-MM-DD"));
     }, _this.previousMonth = function () {
-      _this.props.setMonth(_this.props.month.clone().subtract(1, "months"));
-    }, _this.onMonthChange = function (e) {
-      _this.props.setMonth((0, _moment2.default)(e.target.value));
+      _this.props.setMonth((0, _dateFns.subMonths)(_this.props.month, 1));
+    }, _this.nextMonth = function () {
+      _this.props.setMonth((0, _dateFns.addMonths)(_this.props.month, 1));
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
@@ -389,11 +383,10 @@ var CalendarHeader = function (_Component) {
     value: function render() {
       var month = this.props.month;
 
-      var months = [];
 
-      for (var i = 0; i < 24; i++) {
-        months.push(month.clone().subtract("months", 12).add("months", i));
-      }
+      var months = Array.apply(undefined, _toConsumableArray(Array(24))).map(function (v, i) {
+        return (0, _dateFns.addMonths)(month, i - 12);
+      });
 
       return _react2.default.createElement(
         "div",
@@ -422,15 +415,15 @@ var CalendarHeader = function (_Component) {
         _react2.default.createElement(
           "select",
           {
-            value: month.format("YYYY-MM-DD"),
+            value: (0, _dateFns.format)(month, "YYYY-MM-DD"),
             className: "ReactCalendarHeader__monthpicker",
             onChange: this.onMonthChange
           },
           months.map(function (m) {
             return _react2.default.createElement(
               "option",
-              { value: m.format("YYYY-MM-DD") },
-              m.format("MMMM YYYY")
+              { value: (0, _dateFns.format)(m, "YYYY-MM-DD") },
+              (0, _dateFns.format)(m, "MMMM YYYY")
             );
           })
         )
@@ -442,7 +435,8 @@ var CalendarHeader = function (_Component) {
 }(_react.Component);
 
 CalendarHeader.propTypes = {
-  setMonth: _propTypes2.default.func.isRequired
+  setMonth: _propTypes2.default.func.isRequired,
+  month: _propTypes2.default.instanceOf(Date).isRequired
 };
 exports.default = CalendarHeader;
 
@@ -465,17 +459,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(0);
+var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(1);
+var _propTypes = __webpack_require__(2);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _moment = __webpack_require__(2);
-
-var _moment2 = _interopRequireDefault(_moment);
+var _dateFns = __webpack_require__(0);
 
 var _utils = __webpack_require__(3);
 
@@ -505,31 +497,35 @@ var CalendarTiles = function (_Component) {
 
     return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = CalendarTiles.__proto__ || Object.getPrototypeOf(CalendarTiles)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
       selectionStart: null
-    }, _this.onSelectStart = function (date, e) {
+    }, _this.onSelectStart = function (date) {
       _this.setState({
         selectionStart: date
       });
       _this.props.onSelection([date, date]);
-    }, _this.onSelectMove = function (date, e) {
+    }, _this.onSelectMove = function (date) {
       var selectionStart = _this.state.selectionStart;
-      var selectionRange = _this.props.selectionRange;
+      var _this$props = _this.props,
+          selectionRange = _this$props.selectionRange,
+          onSelection = _this$props.onSelection;
 
 
       if (!selectionStart) {
         return;
       }
 
-      if (date.isSame(selectionStart)) {
-        return _this.props.onSelection([date, date]);
+      if ((0, _dateFns.isEqual)(date, selectionStart)) {
+        onSelection([date, date]);
+        return;
       }
 
       // Selecting backwards
-      if (date.isBefore(selectionStart) && selectionRange[0] !== date) {
-        return _this.props.onSelection([date, selectionStart]);
+      if ((0, _dateFns.isBefore)(date, selectionStart) && selectionRange[0] !== date) {
+        onSelection([date, selectionStart]);
+        return;
       }
 
-      if (date.isAfter(selectionStart) && selectionRange[1] !== date) {
-        return _this.props.onSelection([selectionStart, date]);
+      if ((0, _dateFns.isAfter)(date, selectionStart) && selectionRange[1] !== date) {
+        onSelection([selectionStart, date]);
       }
     }, _this.onSelectEnd = function () {
       _this.setState({
@@ -545,7 +541,7 @@ var CalendarTiles = function (_Component) {
       // of the component
       e.stopPropagation();
       e.preventDefault();
-    }, _this.onWindowClick = function (e) {
+    }, _this.onWindowClick = function () {
       if (!_this.props.clearSelectionOnExternalClick) {
         return;
       }
@@ -557,11 +553,6 @@ var CalendarTiles = function (_Component) {
     key: "componentDidMount",
     value: function componentDidMount() {
       window.addEventListener("click", this.onWindowClick);
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      window.removeEventListener("click", this.onWindowClick);
     }
   }, {
     key: "componentWillReceiveProps",
@@ -577,6 +568,11 @@ var CalendarTiles = function (_Component) {
       }
     }
   }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      window.removeEventListener("click", this.onWindowClick);
+    }
+  }, {
     key: "renderDate",
     value: function renderDate(date) {
       var _this2 = this;
@@ -586,12 +582,12 @@ var CalendarTiles = function (_Component) {
           selectionRange = _props.selectionRange;
 
 
-      var selected = selectionRange ? date.isBetween(selectionRange[0], selectionRange[1], null, "[]") : false;
+      var selected = selectionRange ? (0, _dateFns.isWithinRange)(date, selectionRange[0], selectionRange[1]) : false;
 
       return _react2.default.createElement(
         "li",
         {
-          key: date.format("YYYY-MM-DD"),
+          key: (0, _dateFns.format)(date, "YYYY-MM-DD"),
           onMouseDown: function onMouseDown(e) {
             return _this2.onSelectStart(date, e);
           },
@@ -602,7 +598,7 @@ var CalendarTiles = function (_Component) {
             return _this2.onSelectEnd(date, e);
           },
           className: (0, _utils.bem)("ReactCalendarTiles__tile", {
-            offmonth: date.month() !== month.month(),
+            offmonth: (0, _dateFns.getMonth)(date) !== (0, _dateFns.getMonth)(month),
             selected: selected,
             faded: !!selectionRange && !selected
           })
@@ -610,7 +606,7 @@ var CalendarTiles = function (_Component) {
         _react2.default.createElement(
           "span",
           { className: "ReactCalendarTiles__tile__number" },
-          date.date() === 1 ? date.format("MMM D") : date.format("D")
+          (0, _dateFns.getDate)(date) === 1 ? (0, _dateFns.format)(date, "MMM D") : (0, _dateFns.format)(date, "D")
         ),
         this.props.renderDate(date)
       );
@@ -634,8 +630,8 @@ var CalendarTiles = function (_Component) {
           dates.slice(0, 7).map(function (d) {
             return _react2.default.createElement(
               "li",
-              null,
-              d.format("ddd")
+              { key: d },
+              (0, _dateFns.format)(d, "ddd")
             );
           })
         ),
@@ -686,11 +682,11 @@ var CalendarTiles = function (_Component) {
 }(_react.Component);
 
 CalendarTiles.propTypes = {
-  month: _propTypes2.default.instanceOf(_moment2.default).isRequired,
+  month: _propTypes2.default.instanceOf(Date).isRequired,
   startOfWeek: _propTypes2.default.string,
   renderDate: _propTypes2.default.func.isRequired,
   onSelection: _propTypes2.default.func.isRequired,
-  selectionRange: _propTypes2.default.array,
+  selectionRange: _propTypes2.default.arrayOf(_propTypes2.default.instanceOf(Date)),
   unselectSafeElement: _propTypes2.default.element,
   clearSelectionOnExternalClick: _propTypes2.default.bool
 };

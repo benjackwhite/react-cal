@@ -1,37 +1,32 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import moment from "moment";
+
+import { parse, subMonths, addMonths, format } from "date-fns";
 
 import "./CalendarHeader.scss";
 
 export default class CalendarHeader extends Component {
   static propTypes = {
-    setMonth: PropTypes.func.isRequired
-  };
-  nextMonth = () => {
-    this.props.setMonth(this.props.month.clone().add(1, "months"));
-  };
-
-  previousMonth = () => {
-    this.props.setMonth(this.props.month.clone().subtract(1, "months"));
+    setMonth: PropTypes.func.isRequired,
+    month: PropTypes.instanceOf(Date).isRequired
   };
 
   onMonthChange = e => {
-    this.props.setMonth(moment(e.target.value));
+    this.props.setMonth(parse(e.target.value, "YYYY-MM-DD"));
+  };
+
+  previousMonth = () => {
+    this.props.setMonth(subMonths(this.props.month, 1));
+  };
+
+  nextMonth = () => {
+    this.props.setMonth(addMonths(this.props.month, 1));
   };
 
   render() {
     const { month } = this.props;
-    const months = [];
 
-    for (let i = 0; i < 24; i++) {
-      months.push(
-        month
-          .clone()
-          .subtract("months", 12)
-          .add("months", i)
-      );
-    }
+    const months = Array(...Array(24)).map((v, i) => addMonths(month, i - 12));
 
     return (
       <div className="ReactCalendarHeader">
@@ -49,13 +44,13 @@ export default class CalendarHeader extends Component {
           <button>Clear Selection</button>
         </div>
         <select
-          value={month.format("YYYY-MM-DD")}
+          value={format(month, "YYYY-MM-DD")}
           className={"ReactCalendarHeader__monthpicker"}
           onChange={this.onMonthChange}
         >
           {months.map(m => (
-            <option value={m.format("YYYY-MM-DD")}>
-              {m.format("MMMM YYYY")}
+            <option value={format(m, "YYYY-MM-DD")}>
+              {format(m, "MMMM YYYY")}
             </option>
           ))}
         </select>

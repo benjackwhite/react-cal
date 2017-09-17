@@ -6,14 +6,17 @@
   "scripts": {
     "test": "jest",
     "start": "NODE_ENV=development webpack-dev-server --progress",
-    "build": "rm -r dist/ & NODE_ENV=build webpack",
+    "build": "rm -r dist/ & NODE_ENV=build webpack && NODE_ENV=build-min webpack",
     "lint": "eslint src"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/benjackwhite/react-cal.git"
   },
-  "keywords": ["calendar", "react"],
+  "keywords": [
+    "calendar",
+    "react"
+  ],
   "author": "Ben White <ben@benjackwhite.co.uk>",
   "license": "MIT",
   "bugs": {
@@ -39,11 +42,12 @@
     "node-sass": "^4.5.3",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
+    "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.8.2"
   },
-  "peerDependencies": {
-    "moment": "^2.18.1",
+  "dependencies": {
+    "date-fns": "2.x.x",
     "react": "^0.14.9 || ^15.3.0",
     "react-dom": "^0.14.9 || ^15.3.0"
   }

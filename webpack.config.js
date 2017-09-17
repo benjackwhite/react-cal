@@ -1,5 +1,6 @@
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
 const path = require("path");
 const webpack = require("webpack");
 
@@ -9,33 +10,8 @@ const webpack = require("webpack");
 const WEBPACK_HOST = "localhost";
 const WEBPACK_PORT = process.env.PORT || 9001;
 const ENV_DEVELOPMENT = process.env.NODE_ENV === "development";
-const ENV_BUILD = process.env.NODE_ENV === "build";
-
-// =========================================================
-//  RULES
-// ---------------------------------------------------------
-const rules = {
-  js: {
-    test: /\.jsx?$/,
-    exclude: /node_modules/,
-    loader: "babel-loader"
-  },
-  sass: {
-    test: /\.scss$/,
-    use: [
-      "style-loader",
-      "css-loader?importLoaders=1",
-      {
-        loader: "sass-loader",
-        query: {
-          sourceMap: true,
-          sourceComments: true,
-          includePaths: ["./src"]
-        }
-      }
-    ]
-  }
-};
+const ENV_BUILD = process.env.NODE_ENV.indexOf("build") === 0;
+const MINIFY = process.env.NODE_ENV === "build-min";
 
 // =========================================================
 //  CONFIG
@@ -152,12 +128,6 @@ if (ENV_BUILD) {
   };
 
   config.externals = {
-    moment: {
-      commonjs: "moment",
-      commonjs2: "moment",
-      amd: "moment",
-      root: "moment"
-    },
     react: {
       commonjs: "react",
       commonjs2: "react",
@@ -175,16 +145,26 @@ if (ENV_BUILD) {
       commonjs2: "prop-types",
       amd: "prop-types",
       root: "prop-types"
+    },
+    "date-fns": {
+      commonjs: "date-fns",
+      commonjs2: "date-fns",
+      amd: "date-fns",
+      root: "date-fns"
     }
   };
 
   config.output = {
-    filename: "ReactCalendar.js",
+    filename: MINIFY ? "ReactCalendar.min.js" : "ReactCalendar.js",
     library: "reactCal",
     libraryTarget: "umd",
     path: path.resolve("./dist"),
     publicPath: "/"
   };
 
-  config.plugins = [extractSASSToSASS, extractSASSToCSS];
+  config.plugins = [
+    MINIFY ? new UglifyJSPlugin({ minimize: true }) : false,
+    extractSASSToSASS,
+    extractSASSToCSS
+  ].filter(Boolean);
 }
