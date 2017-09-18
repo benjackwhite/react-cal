@@ -81,7 +81,12 @@ class Calendar extends Component {
 
     return (
       <div className="ReactCalendar">
-        <CalendarHeader month={month} setMonth={this.setMonth} />
+        <CalendarHeader
+          month={month}
+          setMonth={this.setMonth}
+          selectionRange={selectionRange}
+          onClearselection={() => this.onSelection(null)}
+        />
         <CalendarTiles
           month={month}
           renderDate={renderDate}
