@@ -85,7 +85,7 @@ class Calendar extends Component {
           month={month}
           setMonth={this.setMonth}
           selectionRange={selectionRange}
-          onClearselection={() => this.onSelection(null)}
+          onClearSelection={() => this.onSelection(null)}
         />
         <CalendarTiles
           month={month}

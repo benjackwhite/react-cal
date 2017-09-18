@@ -8,7 +8,14 @@ import "./CalendarHeader.scss";
 export default class CalendarHeader extends Component {
   static propTypes = {
     setMonth: PropTypes.func.isRequired,
-    month: PropTypes.instanceOf(Date).isRequired
+    month: PropTypes.instanceOf(Date).isRequired,
+    selectionRange: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
+    onClearSelection: PropTypes.func
+  };
+
+  static defaultProps = {
+    selectionRange: null,
+    onClearSelection: () => null
   };
 
   onMonthChange = e => {
@@ -24,7 +31,7 @@ export default class CalendarHeader extends Component {
   };
 
   render() {
-    const { month, selectionRange, onClearselection } = this.props;
+    const { month, selectionRange, onClearSelection } = this.props;
 
     const months = Array(...Array(24)).map((v, i) => addMonths(month, i - 12));
 
@@ -43,7 +50,7 @@ export default class CalendarHeader extends Component {
           </div>
           {selectionRange ? (
             <div className="ReactCalendarHeader__clear">
-              <button onClick={onClearselection}>Clear Selection</button>
+              <button onClick={onClearSelection}>Clear Selection</button>
             </div>
           ) : null}
         </div>
