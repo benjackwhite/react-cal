@@ -1,29 +1,27 @@
 {
-  "name": "react-cal",
+  "name": "react-quick-cal",
   "version": "0.1.0",
   "description": "Big calendar React component",
   "main": "dist/ReactCalendar.js",
   "scripts": {
     "test": "jest",
     "start": "NODE_ENV=development webpack-dev-server --progress",
-    "build": "rm -r dist/ & NODE_ENV=build webpack && NODE_ENV=build-min webpack",
+    "build":
+      "rm -r dist/ & NODE_ENV=build webpack && NODE_ENV=build-min webpack",
     "build-demo": "rm -r build/ & NODE_ENV=demo webpack",
     "lint": "eslint src"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/benjackwhite/react-cal.git"
+    "url": "git+https://github.com/benjackwhite/react-quick-cal.git"
   },
-  "keywords": [
-    "calendar",
-    "react"
-  ],
+  "keywords": ["calendar", "react"],
   "author": "Ben White <ben@benjackwhite.co.uk>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/benjackwhite/react-cal/issues"
+    "url": "https://github.com/benjackwhite/react-quick-cal/issues"
   },
-  "homepage": "https://github.com/benjackwhite/react-cal#readme",
+  "homepage": "https://github.com/benjackwhite/react-quick-cal#readme",
   "devDependencies": {
     "babel-eslint": "^8.0.0",
     "babel-loader": "^7.1.2",

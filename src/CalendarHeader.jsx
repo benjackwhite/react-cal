@@ -24,24 +24,28 @@ export default class CalendarHeader extends Component {
   };
 
   render() {
-    const { month } = this.props;
+    const { month, selectionRange, onClearselection } = this.props;
 
     const months = Array(...Array(24)).map((v, i) => addMonths(month, i - 12));
 
     return (
       <div className="ReactCalendarHeader">
-        <div className="ReactCalendarHeader__directions">
-          <button
-            onClick={this.previousMonth}
-            className={"ReactCalendarHeader__directionbtn"}
-          />
-          <button
-            onClick={this.nextMonth}
-            className={"ReactCalendarHeader__directionbtn"}
-          />
-        </div>
-        <div className="ReactCalendarHeader__clear">
-          <button>Clear Selection</button>
+        <div className="ReactCalendarHeader__left">
+          <div className="ReactCalendarHeader__directions">
+            <button
+              onClick={this.previousMonth}
+              className={"ReactCalendarHeader__directionbtn"}
+            />
+            <button
+              onClick={this.nextMonth}
+              className={"ReactCalendarHeader__directionbtn"}
+            />
+          </div>
+          {selectionRange ? (
+            <div className="ReactCalendarHeader__clear">
+              <button onClick={onClearselection}>Clear Selection</button>
+            </div>
+          ) : null}
         </div>
         <select
           value={format(month, "YYYY-MM-DD")}
