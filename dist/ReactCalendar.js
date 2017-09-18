@@ -266,6 +266,8 @@ var Calendar = function (_Component) {
   }, {
     key: "render",
     value: function render() {
+      var _this2 = this;
+
       var _props = this.props,
           renderDate = _props.renderDate,
           startOfWeek = _props.startOfWeek,
@@ -279,7 +281,14 @@ var Calendar = function (_Component) {
       return _react2.default.createElement(
         "div",
         { className: "ReactCalendar" },
-        _react2.default.createElement(_CalendarHeader2.default, { month: month, setMonth: this.setMonth }),
+        _react2.default.createElement(_CalendarHeader2.default, {
+          month: month,
+          setMonth: this.setMonth,
+          selectionRange: selectionRange,
+          onClearSelection: function onClearSelection() {
+            return _this2.onSelection(null);
+          }
+        }),
         _react2.default.createElement(_CalendarTiles2.default, {
           month: month,
           renderDate: renderDate,
@@ -381,7 +390,10 @@ var CalendarHeader = function (_Component) {
   _createClass(CalendarHeader, [{
     key: "render",
     value: function render() {
-      var month = this.props.month;
+      var _props = this.props,
+          month = _props.month,
+          selectionRange = _props.selectionRange,
+          onClearSelection = _props.onClearSelection;
 
 
       var months = Array.apply(undefined, _toConsumableArray(Array(24))).map(function (v, i) {
@@ -393,24 +405,28 @@ var CalendarHeader = function (_Component) {
         { className: "ReactCalendarHeader" },
         _react2.default.createElement(
           "div",
-          { className: "ReactCalendarHeader__directions" },
-          _react2.default.createElement("button", {
-            onClick: this.previousMonth,
-            className: "ReactCalendarHeader__directionbtn"
-          }),
-          _react2.default.createElement("button", {
-            onClick: this.nextMonth,
-            className: "ReactCalendarHeader__directionbtn"
-          })
-        ),
-        _react2.default.createElement(
-          "div",
-          { className: "ReactCalendarHeader__clear" },
+          { className: "ReactCalendarHeader__left" },
           _react2.default.createElement(
-            "button",
-            null,
-            "Clear Selection"
-          )
+            "div",
+            { className: "ReactCalendarHeader__directions" },
+            _react2.default.createElement("button", {
+              onClick: this.previousMonth,
+              className: "ReactCalendarHeader__directionbtn"
+            }),
+            _react2.default.createElement("button", {
+              onClick: this.nextMonth,
+              className: "ReactCalendarHeader__directionbtn"
+            })
+          ),
+          selectionRange ? _react2.default.createElement(
+            "div",
+            { className: "ReactCalendarHeader__clear" },
+            _react2.default.createElement(
+              "button",
+              { onClick: onClearSelection },
+              "Clear Selection"
+            )
+          ) : null
         ),
         _react2.default.createElement(
           "select",
@@ -436,7 +452,15 @@ var CalendarHeader = function (_Component) {
 
 CalendarHeader.propTypes = {
   setMonth: _propTypes2.default.func.isRequired,
-  month: _propTypes2.default.instanceOf(Date).isRequired
+  month: _propTypes2.default.instanceOf(Date).isRequired,
+  selectionRange: _propTypes2.default.arrayOf(_propTypes2.default.instanceOf(Date)),
+  onClearSelection: _propTypes2.default.func
+};
+CalendarHeader.defaultProps = {
+  selectionRange: null,
+  onClearSelection: function onClearSelection() {
+    return null;
+  }
 };
 exports.default = CalendarHeader;
 

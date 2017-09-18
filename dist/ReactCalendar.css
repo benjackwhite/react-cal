@@ -2,36 +2,49 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between; }
-  .ReactCalendarHeader__monthpicker,
+  .ReactCalendarHeader__left {
+    display: flex; }
+  .ReactCalendarHeader__monthpicker {
+    outline: none;
+    border: none;
+    border-radius: 0.5em;
+    padding: 0.5em 1em;
+    cursor: pointer;
+    background: none; }
+    .ReactCalendarHeader__monthpicker:hover {
+      opacity: 1;
+      background: rgba(68, 68, 68, 0.1); }
+    .ReactCalendarHeader__monthpicker:active {
+      background: rgba(68, 68, 68, 0.2); }
   .ReactCalendarHeader__clear button {
     outline: none;
     border: none;
     border-radius: 0.5em;
-    background: rgba(68, 68, 68, 0.1);
     padding: 0.5em 1em;
-    cursor: pointer; }
-    .ReactCalendarHeader__monthpicker:hover,
+    cursor: pointer;
+    background: none;
+    background: rgba(68, 68, 68, 0.1);
+    margin-left: 2em; }
     .ReactCalendarHeader__clear button:hover {
       opacity: 1;
-      background: rgba(68, 68, 68, 0.2); }
-    .ReactCalendarHeader__monthpicker:active,
+      background: rgba(68, 68, 68, 0.1); }
     .ReactCalendarHeader__clear button:active {
-      background: rgba(68, 68, 68, 0.3); }
+      background: rgba(68, 68, 68, 0.2); }
   .ReactCalendarHeader__directionbtn {
     outline: none;
     border: none;
     border-radius: 0.5em;
-    background: rgba(68, 68, 68, 0.1);
     padding: 0.5em 1em;
     cursor: pointer;
+    background: none;
     padding: 0.8em 1em;
     opacity: 0.5;
     background: none; }
     .ReactCalendarHeader__directionbtn:hover {
       opacity: 1;
-      background: rgba(68, 68, 68, 0.2); }
+      background: rgba(68, 68, 68, 0.1); }
     .ReactCalendarHeader__directionbtn:active {
-      background: rgba(68, 68, 68, 0.3); }
+      background: rgba(68, 68, 68, 0.2); }
     .ReactCalendarHeader__directionbtn:hover {
       opacity: 1; }
     .ReactCalendarHeader__directionbtn:after {
