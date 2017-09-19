@@ -199,8 +199,6 @@ __webpack_require__(10);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -223,23 +221,14 @@ var Calendar = function (_Component) {
 
     return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Calendar.__proto__ || Object.getPrototypeOf(Calendar)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
       month: _this.props.startMonth,
-      selectionRange: null
+      localSelectionRange: null
     }, _this.onKeyDown = function (e) {
-      if (e.which === 27 && _this.state.selectionRange) {
+      if (e.which === 27) {
         _this.onSelection(null);
       }
     }, _this.onSelection = function (selection) {
-      _this.setState({
-        selectionRange: selection
-      });
-
-      if (selection) {
-        var _this$props;
-
-        (_this$props = _this.props).onSelection.apply(_this$props, _toConsumableArray(selection));
-      } else {
-        _this.props.onSelection(null);
-      }
+      _this.setState({ localSelectionRange: selection });
+      _this.props.onSelection(selection || null);
     }, _this.setMonth = function (month) {
       _this.setState({
         month: month
@@ -247,7 +236,7 @@ var Calendar = function (_Component) {
 
       if (_this.props.onDateRangeChange) {
         var dates = (0, _utils.datesForMonth)(month, _this.props.startOfWeek);
-        _this.props.onDateRangeChange(dates[0], dates[dates.length - 1]);
+        _this.props.onDateRangeChange([dates[0], dates[dates.length - 1]]);
       }
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
@@ -272,10 +261,13 @@ var Calendar = function (_Component) {
           renderDate = _props.renderDate,
           startOfWeek = _props.startOfWeek,
           unselectSafeElement = _props.unselectSafeElement,
-          clearSelectionOnExternalClick = _props.clearSelectionOnExternalClick;
+          clearSelectionOnExternalClick = _props.clearSelectionOnExternalClick,
+          events = _props.events;
       var _state = this.state,
           month = _state.month,
-          selectionRange = _state.selectionRange;
+          localSelectionRange = _state.localSelectionRange;
+      var _props$selectionRange = this.props.selectionRange,
+          selectionRange = _props$selectionRange === undefined ? localSelectionRange : _props$selectionRange;
 
 
       return _react2.default.createElement(
@@ -296,7 +288,8 @@ var Calendar = function (_Component) {
           onSelection: this.onSelection,
           unselectSafeElement: unselectSafeElement,
           clearSelectionOnExternalClick: clearSelectionOnExternalClick,
-          startOfWeek: startOfWeek
+          startOfWeek: startOfWeek,
+          events: events
         })
       );
     }
@@ -312,7 +305,9 @@ Calendar.propTypes = {
   onSelection: _propTypes2.default.func,
   startOfWeek: _propTypes2.default.string,
   unselectSafeElement: _propTypes2.default.element,
-  clearSelectionOnExternalClick: _propTypes2.default.bool
+  clearSelectionOnExternalClick: _propTypes2.default.bool,
+  events: _CalendarTiles.EventsPropType,
+  selectionRange: _propTypes2.default.arrayOf(_propTypes2.default.instanceOf(Date))
 };
 Calendar.defaultProps = {
   startMonth: (0, _dateFns.startOfMonth)(Date.now()),
@@ -325,7 +320,9 @@ Calendar.defaultProps = {
   },
   startOfWeek: "monday",
   unselectSafeElement: null,
-  clearSelectionOnExternalClick: false
+  clearSelectionOnExternalClick: false,
+  events: [],
+  selectionRange: undefined
 };
 exports.default = Calendar;
 
@@ -480,6 +477,7 @@ exports.default = CalendarHeader;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.EventsPropType = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -504,6 +502,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var EventsPropType = exports.EventsPropType = _propTypes2.default.arrayOf(_propTypes2.default.shape({
+  id: _propTypes2.default.instanceOf(Date),
+  start: _propTypes2.default.instanceOf(Date),
+  end: _propTypes2.default.instanceOf(Date)
+}));
 
 var CalendarTiles = function (_Component) {
   _inherits(CalendarTiles, _Component);
@@ -570,6 +574,27 @@ var CalendarTiles = function (_Component) {
         return;
       }
       _this.props.onSelection(null);
+    }, _this.renderEvent = function (evt, dates) {
+      var rangeStart = dates[0];
+      var rangeEnd = dates[dates.length - 1];
+      var startOffset = Math.max(0, (0, _dateFns.differenceInDays)(evt.start, rangeStart));
+      var eventLength = (0, _dateFns.differenceInDays)(evt.end, evt.start) + 1;
+
+      return _react2.default.createElement(
+        "div",
+        {
+          className: (0, _utils.bem)("ReactCalendarEvents__event", {
+            start: (0, _dateFns.isBefore)(rangeStart, evt.start),
+            end: (0, _dateFns.isBefore)(evt.end, rangeEnd)
+          }),
+          key: evt.key,
+          style: {
+            "margin-left": 100 * startOffset / 7 + "%",
+            width: eventLength > 7 - startOffset ? 100 * (7 - startOffset) / 7 + "%" : 100 * eventLength / 7 + "%"
+          }
+        },
+        evt.description
+      );
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
@@ -597,14 +622,31 @@ var CalendarTiles = function (_Component) {
       window.removeEventListener("click", this.onWindowClick);
     }
   }, {
+    key: "renderEvents",
+    value: function renderEvents(dates) {
+      var _this2 = this;
+
+      var eventsToday = this.props.events.filter(function (e) {
+        return (0, _dateFns.areRangesOverlapping)(e.start, e.end, dates[0], dates[dates.length - 1]);
+      });
+
+      return _react2.default.createElement(
+        "div",
+        { className: "ReactCalendarEvents" },
+        eventsToday.map(function (evt) {
+          return _this2.renderEvent(evt, dates);
+        })
+      );
+    }
+  }, {
     key: "renderDate",
     value: function renderDate(date) {
-      var _this2 = this;
+      var _this3 = this;
 
       var _props = this.props,
           month = _props.month,
-          selectionRange = _props.selectionRange;
-
+          selectionRange = _props.selectionRange,
+          renderDate = _props.renderDate;
 
       var selected = selectionRange ? (0, _dateFns.isWithinRange)(date, selectionRange[0], selectionRange[1]) : false;
 
@@ -613,13 +655,13 @@ var CalendarTiles = function (_Component) {
         {
           key: (0, _dateFns.format)(date, "YYYY-MM-DD"),
           onMouseDown: function onMouseDown(e) {
-            return _this2.onSelectStart(date, e);
+            return _this3.onSelectStart(date, e);
           },
           onMouseOver: function onMouseOver(e) {
-            return _this2.onSelectMove(date, e);
+            return _this3.onSelectMove(date, e);
           },
           onMouseUp: function onMouseUp(e) {
-            return _this2.onSelectEnd(date, e);
+            return _this3.onSelectEnd(date, e);
           },
           className: (0, _utils.bem)("ReactCalendarTiles__tile", {
             offmonth: (0, _dateFns.getMonth)(date) !== (0, _dateFns.getMonth)(month),
@@ -632,22 +674,28 @@ var CalendarTiles = function (_Component) {
           { className: "ReactCalendarTiles__tile__number" },
           (0, _dateFns.getDate)(date) === 1 ? (0, _dateFns.format)(date, "MMM D") : (0, _dateFns.format)(date, "D")
         ),
-        this.props.renderDate(date)
+        renderDate(date)
       );
     }
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       var _props2 = this.props,
           month = _props2.month,
-          startOfWeek = _props2.startOfWeek;
+          startOfWeek = _props2.startOfWeek,
+          selectionRange = _props2.selectionRange;
 
       var dates = (0, _utils.datesForMonth)(month, startOfWeek);
       return _react2.default.createElement(
         "div",
-        { className: "ReactCalendarTiles", onClick: this.onSafeAreaClick },
+        {
+          className: (0, _utils.bem)("ReactCalendarTiles", {
+            isSelecting: !!selectionRange
+          }),
+          onClick: this.onSafeAreaClick
+        },
         _react2.default.createElement(
           "ul",
           { className: "ReactCalendarTiles__days" },
@@ -666,36 +714,41 @@ var CalendarTiles = function (_Component) {
             "div",
             { className: "ReactCalendarTiles__tiles__row" },
             dates.slice(0, 7).map(function (date) {
-              return _this3.renderDate(date);
-            })
+              return _this4.renderDate(date);
+            }),
+            this.renderEvents(dates.slice(0, 7))
           ),
           _react2.default.createElement(
             "div",
             { className: "ReactCalendarTiles__tiles__row" },
             dates.slice(7, 14).map(function (date) {
-              return _this3.renderDate(date);
-            })
+              return _this4.renderDate(date);
+            }),
+            this.renderEvents(dates.slice(7, 14))
           ),
           _react2.default.createElement(
             "div",
             { className: "ReactCalendarTiles__tiles__row" },
             dates.slice(14, 21).map(function (date) {
-              return _this3.renderDate(date);
-            })
+              return _this4.renderDate(date);
+            }),
+            this.renderEvents(dates.slice(14, 21))
           ),
           _react2.default.createElement(
             "div",
             { className: "ReactCalendarTiles__tiles__row" },
             dates.slice(21, 28).map(function (date) {
-              return _this3.renderDate(date);
-            })
+              return _this4.renderDate(date);
+            }),
+            this.renderEvents(dates.slice(21, 28))
           ),
           _react2.default.createElement(
             "div",
             { className: "ReactCalendarTiles__tiles__row" },
             dates.slice(28, 35).map(function (date) {
-              return _this3.renderDate(date);
-            })
+              return _this4.renderDate(date);
+            }),
+            this.renderEvents(dates.slice(28, 35))
           )
         )
       );
@@ -712,13 +765,16 @@ CalendarTiles.propTypes = {
   onSelection: _propTypes2.default.func.isRequired,
   selectionRange: _propTypes2.default.arrayOf(_propTypes2.default.instanceOf(Date)),
   unselectSafeElement: _propTypes2.default.element,
-  clearSelectionOnExternalClick: _propTypes2.default.bool
+  clearSelectionOnExternalClick: _propTypes2.default.bool,
+  events: EventsPropType.isRequired,
+  renderEvent: _propTypes2.default.func
 };
 CalendarTiles.defaultProps = {
   startOfWeek: "monday",
   selectionRange: null,
   unselectSafeElement: null,
-  clearSelectionOnExternalClick: false
+  clearSelectionOnExternalClick: false,
+  renderEvent: undefined
 };
 exports.default = CalendarTiles;
 

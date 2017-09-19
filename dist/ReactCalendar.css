@@ -65,6 +65,32 @@
       .ReactCalendarHeader__directionbtn:last-child:after {
         margin-left: -0.3em;
         transform: rotate(135deg); }
+.ReactCalendarEvents {
+  position: relative;
+  padding-top: 1.5em; }
+  .ReactCalendarEvents:after {
+    content: "";
+    display: table;
+    clear: both; }
+  .ReactCalendarEvents__event {
+    position: relative;
+    float: left;
+    display: block;
+    box-sizing: border-box;
+    z-index: 3;
+    padding: 0.5em;
+    margin: 0.1em 0;
+    font-size: 0.8em;
+    width: 100%;
+    background: rgba(68, 68, 68, 0.8);
+    color: #fff; }
+    .ReactCalendarEvents__event--start {
+      border-top-left-radius: 1em;
+      border-bottom-left-radius: 1em; }
+    .ReactCalendarEvents__event--end {
+      border-top-right-radius: 1em;
+      border-bottom-right-radius: 1em; }
+
 .ReactCalendarTiles {
   max-width: 100%;
   width: 100%;
@@ -86,8 +112,8 @@
   .ReactCalendarTiles__tiles {
     height: 100%; }
     .ReactCalendarTiles__tiles__row {
-      height: 20%;
-      margin-top: -1px; }
+      position: relative;
+      min-height: 20%; }
       .ReactCalendarTiles__tiles__row:first-child .ReactCalendarTiles__tile:first-child {
         border-top-left-radius: 0.25em; }
       .ReactCalendarTiles__tiles__row:first-child .ReactCalendarTiles__tile:last-child {
@@ -97,19 +123,31 @@
       .ReactCalendarTiles__tiles__row:last-child .ReactCalendarTiles__tile:last-child {
         border-bottom-right-radius: 0.25em; }
   .ReactCalendarTiles__tile {
-    position: relative;
+    position: absolute;
+    z-index: 1;
     display: inline-block;
     box-sizing: border-box;
-    width: 14.28%;
-    height: 100%;
     padding: 0;
     margin: 0;
     transition: 200ms;
     background: white;
-    border: 1px solid #ddd;
-    margin-left: -1px;
-    padding-left: 1px;
-    padding-top: 1px; }
+    box-shadow: 0px 0px 0px 0.5px #ddd inset;
+    vertical-align: top;
+    top: 0;
+    width: 14.28571%;
+    height: 100%; }
+    .ReactCalendarTiles__tile:nth-child(2) {
+      left: 14.28571%; }
+    .ReactCalendarTiles__tile:nth-child(3) {
+      left: 28.57143%; }
+    .ReactCalendarTiles__tile:nth-child(4) {
+      left: 42.85714%; }
+    .ReactCalendarTiles__tile:nth-child(5) {
+      left: 57.14286%; }
+    .ReactCalendarTiles__tile:nth-child(6) {
+      left: 71.42857%; }
+    .ReactCalendarTiles__tile:nth-child(7) {
+      left: 85.71429%; }
     .ReactCalendarTiles__tile__number {
       position: absolute;
       z-index: 2;
@@ -129,6 +167,8 @@
         height: 100%;
         box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
         z-index: -1; }
+  .ReactCalendarTiles--isSelecting .ReactCalendarEvents__event {
+    opacity: 0.2; }
 
 @keyframes pop {
   0% {

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { startOfMonth } from "date-fns";
 import CalendarHeader from "./CalendarHeader";
-import CalendarTiles from "./CalendarTiles";
+import CalendarTiles, { EventsPropType } from "./CalendarTiles";
 import { datesForMonth } from "./utils";
 
 import "./Calendar.scss";
@@ -15,7 +15,9 @@ class Calendar extends Component {
     onSelection: PropTypes.func,
     startOfWeek: PropTypes.string,
     unselectSafeElement: PropTypes.element,
-    clearSelectionOnExternalClick: PropTypes.bool
+    clearSelectionOnExternalClick: PropTypes.bool,
+    events: EventsPropType,
+    selectionRange: PropTypes.arrayOf(PropTypes.instanceOf(Date))
   };
 
   static defaultProps = {
@@ -25,12 +27,14 @@ class Calendar extends Component {
     onSelection: () => null,
     startOfWeek: "monday",
     unselectSafeElement: null,
-    clearSelectionOnExternalClick: false
+    clearSelectionOnExternalClick: false,
+    events: [],
+    selectionRange: undefined
   };
 
   state = {
     month: this.props.startMonth,
-    selectionRange: null
+    localSelectionRange: null
   };
 
   componentDidMount() {
@@ -42,21 +46,14 @@ class Calendar extends Component {
   }
 
   onKeyDown = e => {
-    if (e.which === 27 && this.state.selectionRange) {
+    if (e.which === 27) {
       this.onSelection(null);
     }
   };
 
   onSelection = selection => {
-    this.setState({
-      selectionRange: selection
-    });
-
-    if (selection) {
-      this.props.onSelection(...selection);
-    } else {
-      this.props.onSelection(null);
-    }
+    this.setState({ localSelectionRange: selection });
+    this.props.onSelection(selection || null);
   };
 
   setMonth = month => {
@@ -66,7 +63,7 @@ class Calendar extends Component {
 
     if (this.props.onDateRangeChange) {
       const dates = datesForMonth(month, this.props.startOfWeek);
-      this.props.onDateRangeChange(dates[0], dates[dates.length - 1]);
+      this.props.onDateRangeChange([dates[0], dates[dates.length - 1]]);
     }
   };
 
@@ -75,9 +72,11 @@ class Calendar extends Component {
       renderDate,
       startOfWeek,
       unselectSafeElement,
-      clearSelectionOnExternalClick
+      clearSelectionOnExternalClick,
+      events
     } = this.props;
-    const { month, selectionRange } = this.state;
+    const { month, localSelectionRange } = this.state;
+    const { selectionRange = localSelectionRange } = this.props;
 
     return (
       <div className="ReactCalendar">
@@ -95,6 +94,7 @@ class Calendar extends Component {
           unselectSafeElement={unselectSafeElement}
           clearSelectionOnExternalClick={clearSelectionOnExternalClick}
           startOfWeek={startOfWeek}
+          events={events}
         />
       </div>
     );
