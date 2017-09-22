@@ -9,7 +9,6 @@
     "build": "rm -r dist/ & NODE_ENV=build webpack && NODE_ENV=build-min webpack",
     "build-demo": "rm -r build/ & NODE_ENV=demo webpack",
     "lint": "eslint src",
-    "publish": "npm run build && npm publish"
   },
   "repository": {
     "type": "git",
