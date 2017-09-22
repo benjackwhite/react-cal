@@ -54,11 +54,6 @@ export default class CalendarTiles extends Component {
     window.addEventListener("mouseup", this.onSelectEnd);
   }
 
-  componentWillUnmount() {
-    window.removeEventListener("click", this.onWindowClick);
-    window.removeEventListener("mouseup", this.onSelectEnd);
-  }
-
   componentWillReceiveProps(nextProps) {
     if (!nextProps.selectionRange) {
       this.setState({
@@ -76,6 +71,7 @@ export default class CalendarTiles extends Component {
 
   componentWillUnmount() {
     window.removeEventListener("click", this.onWindowClick);
+    window.removeEventListener("mouseup", this.onSelectEnd);
   }
 
   onSelectStart = date => {
