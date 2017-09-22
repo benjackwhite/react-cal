@@ -556,15 +556,23 @@ var CalendarTiles = function (_Component) {
         onSelection([selectionStart, date]);
       }
     }, _this.onSelectEnd = function () {
+      var _this$props2 = _this.props,
+          selectionRange = _this$props2.selectionRange,
+          onSelection = _this$props2.onSelection;
+
+
+      if (!_this.state.selectionStart) {
+        return;
+      }
+
       _this.setState({
         selectionStart: null
       });
 
-      if (_this.props.selectionRange) {
-        _this.props.onSelection(_this.props.selectionRange);
+      if (selectionRange) {
+        onSelection(selectionRange);
       }
     }, _this.onSafeAreaClick = function (e) {
-      console.log("Safe click");
       // This is needed to stop the window click event from firing so we can detect clicks outside
       // of the component
       e.stopPropagation();
@@ -602,6 +610,7 @@ var CalendarTiles = function (_Component) {
     key: "componentDidMount",
     value: function componentDidMount() {
       window.addEventListener("click", this.onWindowClick);
+      window.addEventListener("mouseup", this.onSelectEnd);
     }
   }, {
     key: "componentWillReceiveProps",
@@ -620,6 +629,7 @@ var CalendarTiles = function (_Component) {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
       window.removeEventListener("click", this.onWindowClick);
+      window.removeEventListener("mouseup", this.onSelectEnd);
     }
   }, {
     key: "renderEvents",

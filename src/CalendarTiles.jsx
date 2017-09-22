@@ -122,7 +122,6 @@ export default class CalendarTiles extends Component {
   };
 
   onSafeAreaClick = e => {
-    console.log("Safe click");
     // This is needed to stop the window click event from firing so we can detect clicks outside
     // of the component
     e.stopPropagation();
