@@ -136,17 +136,17 @@
     top: 0;
     width: 14.28571%;
     height: 100%; }
-    .ReactCalendarTiles__tile:nth-child(2) {
+    .ReactCalendarTiles__tile:nth-child(6) {
       left: 14.28571%; }
-    .ReactCalendarTiles__tile:nth-child(3) {
+    .ReactCalendarTiles__tile:nth-child(5) {
       left: 28.57143%; }
     .ReactCalendarTiles__tile:nth-child(4) {
       left: 42.85714%; }
-    .ReactCalendarTiles__tile:nth-child(5) {
+    .ReactCalendarTiles__tile:nth-child(3) {
       left: 57.14286%; }
-    .ReactCalendarTiles__tile:nth-child(6) {
+    .ReactCalendarTiles__tile:nth-child(2) {
       left: 71.42857%; }
-    .ReactCalendarTiles__tile:nth-child(7) {
+    .ReactCalendarTiles__tile:nth-child(1) {
       left: 85.71429%; }
     .ReactCalendarTiles__tile__number {
       position: absolute;

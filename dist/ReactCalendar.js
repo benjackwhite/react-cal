@@ -723,7 +723,7 @@ var CalendarTiles = function (_Component) {
           _react2.default.createElement(
             "div",
             { className: "ReactCalendarTiles__tiles__row" },
-            dates.slice(0, 7).map(function (date) {
+            dates.slice(0, 7).reverse().map(function (date) {
               return _this4.renderDate(date);
             }),
             this.renderEvents(dates.slice(0, 7))
@@ -731,7 +731,7 @@ var CalendarTiles = function (_Component) {
           _react2.default.createElement(
             "div",
             { className: "ReactCalendarTiles__tiles__row" },
-            dates.slice(7, 14).map(function (date) {
+            dates.slice(7, 14).reverse().map(function (date) {
               return _this4.renderDate(date);
             }),
             this.renderEvents(dates.slice(7, 14))
@@ -739,7 +739,7 @@ var CalendarTiles = function (_Component) {
           _react2.default.createElement(
             "div",
             { className: "ReactCalendarTiles__tiles__row" },
-            dates.slice(14, 21).map(function (date) {
+            dates.slice(14, 21).reverse().map(function (date) {
               return _this4.renderDate(date);
             }),
             this.renderEvents(dates.slice(14, 21))
@@ -747,7 +747,7 @@ var CalendarTiles = function (_Component) {
           _react2.default.createElement(
             "div",
             { className: "ReactCalendarTiles__tiles__row" },
-            dates.slice(21, 28).map(function (date) {
+            dates.slice(21, 28).reverse().map(function (date) {
               return _this4.renderDate(date);
             }),
             this.renderEvents(dates.slice(21, 28))
@@ -755,7 +755,7 @@ var CalendarTiles = function (_Component) {
           _react2.default.createElement(
             "div",
             { className: "ReactCalendarTiles__tiles__row" },
-            dates.slice(28, 35).map(function (date) {
+            dates.slice(28, 35).reverse().map(function (date) {
               return _this4.renderDate(date);
             }),
             this.renderEvents(dates.slice(28, 35))

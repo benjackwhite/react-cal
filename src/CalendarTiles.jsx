@@ -214,23 +214,38 @@ export default class CalendarTiles extends Component {
         </ul>
         <ul className="ReactCalendarTiles__tiles">
           <div className="ReactCalendarTiles__tiles__row">
-            {dates.slice(0, 7).map(date => this.renderDate(date))}
+            {dates
+              .slice(0, 7)
+              .reverse()
+              .map(date => this.renderDate(date))}
             {this.renderEvents(dates.slice(0, 7))}
           </div>
           <div className="ReactCalendarTiles__tiles__row">
-            {dates.slice(7, 14).map(date => this.renderDate(date))}
+            {dates
+              .slice(7, 14)
+              .reverse()
+              .map(date => this.renderDate(date))}
             {this.renderEvents(dates.slice(7, 14))}
           </div>
           <div className="ReactCalendarTiles__tiles__row">
-            {dates.slice(14, 21).map(date => this.renderDate(date))}
+            {dates
+              .slice(14, 21)
+              .reverse()
+              .map(date => this.renderDate(date))}
             {this.renderEvents(dates.slice(14, 21))}
           </div>
           <div className="ReactCalendarTiles__tiles__row">
-            {dates.slice(21, 28).map(date => this.renderDate(date))}
+            {dates
+              .slice(21, 28)
+              .reverse()
+              .map(date => this.renderDate(date))}
             {this.renderEvents(dates.slice(21, 28))}
           </div>
           <div className="ReactCalendarTiles__tiles__row">
-            {dates.slice(28, 35).map(date => this.renderDate(date))}
+            {dates
+              .slice(28, 35)
+              .reverse()
+              .map(date => this.renderDate(date))}
             {this.renderEvents(dates.slice(28, 35))}
           </div>
         </ul>
