@@ -114,13 +114,13 @@
     .ReactCalendarTiles__tiles__row {
       position: relative;
       min-height: 20%; }
-      .ReactCalendarTiles__tiles__row:first-child .ReactCalendarTiles__tile:first-child {
+      .ReactCalendarTiles__tiles__row:first-child .ReactCalendarTiles__tile:first-of-type {
         border-top-left-radius: 0.25em; }
-      .ReactCalendarTiles__tiles__row:first-child .ReactCalendarTiles__tile:last-child {
+      .ReactCalendarTiles__tiles__row:first-child .ReactCalendarTiles__tile:last-of-type {
         border-top-right-radius: 0.25em; }
-      .ReactCalendarTiles__tiles__row:last-child .ReactCalendarTiles__tile:first-child {
+      .ReactCalendarTiles__tiles__row:last-child .ReactCalendarTiles__tile:first-of-type {
         border-bottom-left-radius: 0.25em; }
-      .ReactCalendarTiles__tiles__row:last-child .ReactCalendarTiles__tile:last-child {
+      .ReactCalendarTiles__tiles__row:last-child .ReactCalendarTiles__tile:last-of-type {
         border-bottom-right-radius: 0.25em; }
   .ReactCalendarTiles__tile {
     position: absolute;
