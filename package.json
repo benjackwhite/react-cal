@@ -1,6 +1,6 @@
 {
   "name": "react-quick-cal",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Big calendar React component",
   "main": "dist/ReactCalendar.js",
   "scripts": {
