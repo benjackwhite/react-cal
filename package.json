@@ -31,6 +31,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "css-loader": "^0.28.7",
+    "date-fns": "^1.28.5",
     "eslint": "^4.7.0",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-config-prettier": "^2.5.0",
@@ -41,15 +42,17 @@
     "html-webpack-plugin": "^2.30.1",
     "jest": "^21.1.0",
     "node-sass": "^4.5.3",
+    "react": "^15.0.0 || ^16.0.0",
+    "react-dom": "^15.0.0 || ^16.0.0",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.8.2"
   },
-  "dependencies": {
+  "peerDependencies": {
     "date-fns": "^1.28.5",
-    "react": "^15 || ^16",
-    "react-dom": "^15 || ^16"
+    "react": "^15.0.0 || ^16.0.0",
+    "react-dom": "^15.0.0 || ^16.0.0"
   }
 }
