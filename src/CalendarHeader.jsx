@@ -31,7 +31,7 @@ export default class CalendarHeader extends Component {
   };
 
   render() {
-    const { month, selectionRange, onClearSelection } = this.props;
+    const { month, selectionRange, onClearSelection, locale } = this.props;
 
     const months = Array(...Array(24)).map((v, i) => addMonths(month, i - 12));
 
@@ -55,13 +55,13 @@ export default class CalendarHeader extends Component {
           ) : null}
         </div>
         <select
-          value={format(month, "YYYY-MM-DD")}
+          value={format(month, "YYYY-MM-DD", { locale })}
           className={"ReactCalendarHeader__monthpicker"}
           onChange={this.onMonthChange}
         >
           {months.map(m => (
-            <option value={format(m, "YYYY-MM-DD")}>
-              {format(m, "MMMM YYYY")}
+            <option value={format(m, "YYYY-MM-DD", { locale })}>
+              {format(m, "MMMM YYYY", { locale })}
             </option>
           ))}
         </select>
