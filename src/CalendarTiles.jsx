@@ -174,14 +174,14 @@ export default class CalendarTiles extends Component {
   }
 
   renderDate(date) {
-    const { month, selectionRange, renderDate } = this.props;
+    const { month, selectionRange, renderDate, locale } = this.props;
     const selected = selectionRange
       ? isWithinRange(date, selectionRange[0], selectionRange[1])
       : false;
 
     return (
       <li
-        key={format(date, "YYYY-MM-DD")}
+        key={format(date, "YYYY-MM-DD", { locale })}
         onMouseDown={e => this.onSelectStart(date, e)}
         onMouseOver={e => this.onSelectMove(date, e)}
         onMouseUp={e => this.onSelectEnd(date, e)}
@@ -192,7 +192,7 @@ export default class CalendarTiles extends Component {
         })}
       >
         <span className="ReactCalendarTiles__tile__number">
-          {getDate(date) === 1 ? format(date, "MMM D") : format(date, "D")}
+          {getDate(date) === 1 ? format(date, "MMM D", { locale }) : format(date, "D", { locale })}
         </span>
         {renderDate(date)}
       </li>
@@ -200,7 +200,7 @@ export default class CalendarTiles extends Component {
   }
 
   render() {
-    const { month, startOfWeek, selectionRange } = this.props;
+    const { month, startOfWeek, selectionRange, locale } = this.props;
     const dates = datesForMonth(month, startOfWeek);
     return (
       <div
@@ -210,7 +210,7 @@ export default class CalendarTiles extends Component {
         onClick={this.onSafeAreaClick}
       >
         <ul className="ReactCalendarTiles__days">
-          {dates.slice(0, 7).map(d => <li key={d}>{format(d, "ddd")}</li>)}
+          {dates.slice(0, 7).map(d => <li key={d}>{format(d, "ddd", { locale })}</li>)}
         </ul>
         <ul className="ReactCalendarTiles__tiles">
           <div className="ReactCalendarTiles__tiles__row">

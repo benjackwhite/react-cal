@@ -1,3 +1,4 @@
+import defaultLocale from "date-fns/locale/en";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { startOfMonth } from "date-fns";
@@ -17,7 +18,8 @@ class Calendar extends Component {
     unselectSafeElement: PropTypes.element,
     clearSelectionOnExternalClick: PropTypes.bool,
     events: EventsPropType,
-    selectionRange: PropTypes.arrayOf(PropTypes.instanceOf(Date))
+    selectionRange: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
+    locale: PropTypes.object
   };
 
   static defaultProps = {
@@ -29,7 +31,8 @@ class Calendar extends Component {
     unselectSafeElement: null,
     clearSelectionOnExternalClick: false,
     events: [],
-    selectionRange: undefined
+    selectionRange: undefined,
+    locale: defaultLocale
   };
 
   state = {
@@ -76,7 +79,7 @@ class Calendar extends Component {
       events
     } = this.props;
     const { month, localSelectionRange } = this.state;
-    const { selectionRange = localSelectionRange } = this.props;
+    const { selectionRange = localSelectionRange, locale } = this.props;
 
     return (
       <div className="ReactCalendar">
@@ -85,6 +88,7 @@ class Calendar extends Component {
           setMonth={this.setMonth}
           selectionRange={selectionRange}
           onClearSelection={() => this.onSelection(null)}
+          locale={locale}
         />
         <CalendarTiles
           month={month}
@@ -95,6 +99,7 @@ class Calendar extends Component {
           clearSelectionOnExternalClick={clearSelectionOnExternalClick}
           startOfWeek={startOfWeek}
           events={events}
+          locale={locale}
         />
       </div>
     );
