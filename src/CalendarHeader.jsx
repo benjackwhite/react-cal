@@ -31,40 +31,42 @@ export default class CalendarHeader extends Component {
   };
 
   render() {
-    const { month, selectionRange, onClearSelection } = this.props;
+    const { month, selectionRange, onClearSelection, locale } = this.props;
 
     const months = Array(...Array(24)).map((v, i) => addMonths(month, i - 12));
 
     return (
       <div className="ReactCalendarHeader">
         <div className="ReactCalendarHeader__left">
-          <div className="ReactCalendarHeader__directions">
-            <button
-              onClick={this.previousMonth}
-              className={"ReactCalendarHeader__directionbtn"}
-            />
-            <button
-              onClick={this.nextMonth}
-              className={"ReactCalendarHeader__directionbtn"}
-            />
-          </div>
+          <select
+            value={format(month, "YYYY-MM-DD", { locale })}
+            className={"ReactCalendarHeader__monthpicker"}
+            onChange={this.onMonthChange}
+          >
+            {months.map(m => (
+              <option value={format(m, "YYYY-MM-DD", { locale })}>
+                {format(m, "MMMM YYYY", { locale })}
+              </option>
+            ))}
+          </select>
+          
           {selectionRange ? (
             <div className="ReactCalendarHeader__clear">
               <button onClick={onClearSelection}>Clear Selection</button>
             </div>
           ) : null}
         </div>
-        <select
-          value={format(month, "YYYY-MM-DD")}
-          className={"ReactCalendarHeader__monthpicker"}
-          onChange={this.onMonthChange}
-        >
-          {months.map(m => (
-            <option value={format(m, "YYYY-MM-DD")}>
-              {format(m, "MMMM YYYY")}
-            </option>
-          ))}
-        </select>
+
+        <div className="ReactCalendarHeader__directions">
+          <button
+            onClick={this.previousMonth}
+            className={"ReactCalendarHeader__directionbtn"}
+          />
+          <button
+            onClick={this.nextMonth}
+            className={"ReactCalendarHeader__directionbtn"}
+          />
+        </div>
       </div>
     );
   }

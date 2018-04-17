@@ -19,7 +19,6 @@ const events = [
     start: addDays(Date.now(), -10),
     end: addDays(Date.now(), 20)
   },
-
   {
     key: 3,
     description: "Holiday time",
@@ -35,4 +34,5 @@ const events = [
   }
 ];
 
-ReactDOM.render(<Calendar events={events} />, rootEl);
+const locale = require("date-fns/locale/fr");
+ReactDOM.render(<Calendar events={events} locale={locale} />, rootEl);
