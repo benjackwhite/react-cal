@@ -38,33 +38,35 @@ export default class CalendarHeader extends Component {
     return (
       <div className="ReactCalendarHeader">
         <div className="ReactCalendarHeader__left">
-          <div className="ReactCalendarHeader__directions">
-            <button
-              onClick={this.previousMonth}
-              className={"ReactCalendarHeader__directionbtn"}
-            />
-            <button
-              onClick={this.nextMonth}
-              className={"ReactCalendarHeader__directionbtn"}
-            />
-          </div>
+          <select
+            value={format(month, "YYYY-MM-DD", { locale })}
+            className={"ReactCalendarHeader__monthpicker"}
+            onChange={this.onMonthChange}
+          >
+            {months.map(m => (
+              <option value={format(m, "YYYY-MM-DD", { locale })}>
+                {format(m, "MMMM YYYY", { locale })}
+              </option>
+            ))}
+          </select>
+          
           {selectionRange ? (
             <div className="ReactCalendarHeader__clear">
               <button onClick={onClearSelection}>Clear Selection</button>
             </div>
           ) : null}
         </div>
-        <select
-          value={format(month, "YYYY-MM-DD", { locale })}
-          className={"ReactCalendarHeader__monthpicker"}
-          onChange={this.onMonthChange}
-        >
-          {months.map(m => (
-            <option value={format(m, "YYYY-MM-DD", { locale })}>
-              {format(m, "MMMM YYYY", { locale })}
-            </option>
-          ))}
-        </select>
+
+        <div className="ReactCalendarHeader__directions">
+          <button
+            onClick={this.previousMonth}
+            className={"ReactCalendarHeader__directionbtn"}
+          />
+          <button
+            onClick={this.nextMonth}
+            className={"ReactCalendarHeader__directionbtn"}
+          />
+        </div>
       </div>
     );
   }
